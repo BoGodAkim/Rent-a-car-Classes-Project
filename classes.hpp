@@ -12,18 +12,20 @@ class RentCarService
 {
 private:
     vector<Car> cars;            // Vector of cars
-    map<string, Client> clients; // Map of clients with their phone number as key
-    void addCar();               // Add car
-    void addClient();            // Add client
-    void rentCar();              // Rent car
-    void deleteRentSchedule();   // Delete rent schedule
-    void showCars();             // Show cars
-    void returnCar();            // Return car
-    void updateCar();            // Update car
-    void deleteCar();            // Delete car
+    map<string, Client> clients; // Map of clients with their passport number as key
+    void addCar();               // Add a car to the vector with parameters from the manager
+    void addClient();            // Add client to the map with parameters from the manager
+    void rentCar();              // This function call Car* chooseCar() and Client* chooseClient(), ask date period from manager and if can rent the car to the client using function Car::addSchedule() and Client::addSchedule()
+    void deleteRentSchedule();   // Delete rent schedule from the car and client call Client* choose Client using function Client::deleteSchedule()
+    void showCars();             // Show cars all cars in the vector using function Car::showCar()
+    void returnCar();            // Return car call Client* chooseClient() and call Client::deleteSchedule()
+    void updateCar();            // Update car call Car* chooseCar() and ask parameters from the manager and call Car::updateMileage(), Car::updatePrice() or Car::updateDeposit()
+    void deleteCar();            // Delete car call Car* chooseCar()
+    Car *chooseCar();            // Choose car from the vector using function Car::showCar() and ask for the number of the car from the manager
+    Client *chooseClient();      // Choose client: ask for the passpot number of the client and return the pointer to the client
 public:
     RentCarService(); // Constructor
-    void enterMenu(); // Enter menu
+    void enterMenu(); // Enter menu ask manager to enter the option by number and call the function
 };
 
 class Car
@@ -35,40 +37,40 @@ private:
     string VIN;                   // VIN
     int year;                     // Year
     int mileage;                  // Mileage
-    int price_per_day;            // Price per day
+    float price_per_day;          // Price per day
     int deposit;                  // Deposit
     set<ScheduleForCar> schedule; // Schedule for car
 
 public:
     Car(string brand, string model, string color, string VIN, int year, int mileage, int price_per_day, int deposit); // Constructor
     Car();                                                                                                            // Constructor
-    void addSchedule(ScheduleForCar schedule);                                                                        // Add schedule
+    bool addSchedule(ScheduleForCar schedule);                                                                        // Add schedule to the set schedule if the car is available for this schedule and return true if the car is available for this schedule
     void deleteSchedule(ScheduleForCar schedule);                                                                     // Delete schedule
     void showSchedule();                                                                                              // Show schedule
     void showCar();                                                                                                   // Show car
-    void updateMileage();                                                                                             // Update mileage
-    void updatePrice();                                                                                               // Update price
-    void updateDeposit();                                                                                             // Update deposit
+    void updateMileage();                                                                                             // Update mileage ask manager to enter the new mileage which larger then before and update the mileage
+    void updatePrice();                                                                                               // Update price ask manager to enter the new price and update the price
+    void updateDeposit();                                                                                             // Update deposit ask manager to enter the new deposit and update the deposit
 };
 
 class Client
 {
 private:
-    string name;                       // Name
-    string surname;                    // Surname
-    string date_of_birth;              // Date of birth
-    string passport_number;            // Passport number
-    string passport_expiration_date;   // Passport expiration date
-    string phone_number;               // Phone number
-    string email;                      // Email
-    string address;                    // Address
-    set<ScheduleForCustomer> schedule; // Schedule for customer
+    string name;                     // Name
+    string surname;                  // Surname
+    string date_of_birth;            // Date of birth
+    string passport_number;          // Passport number
+    string passport_expiration_date; // Passport expiration date
+    string phone_number;             // Phone number
+    string email;                    // Email
+    string address;                  // Address
+    set<ScheduleForClient> schedule; // Schedule for customer
 
 public:
     Client(string name, string surname, string date_of_birth, string passport_number, string passport_expiration_date, string phone_number, string email, string address); // Constructor
     Client();                                                                                                                                                              // Constructor
-    void addSchedule(ScheduleForCustomer schedule);                                                                                                                        // Add schedule
-    void deleteSchedule(ScheduleForCustomer schedule);                                                                                                                     // Delete schedule
+    bool addSchedule(ScheduleForClient schedule);                                                                                                                          // Add schedule to the set schedule if the car is available for this schedule and return true if the car is available for this schedule
+    void deleteSchedule();                                                                                                                                                 // Delete schedule: call showSchedule() and ask for the number of the schedule from the manager, call Car::deleteSchedule(ScheduleForClient schedule) and delete the schedule from the set schedule
     void showSchedule();                                                                                                                                                   // Show schedule
     void showClient();                                                                                                                                                     // Show client
 };
@@ -87,7 +89,6 @@ public:
     bool operator<(Schedule &other);                                                              // Operator <
     Schedule(int day_from, int month_from, int year_from, int day_to, int month_to, int year_to); // Constructor
     Schedule();                                                                                   // Constructor
-    void showSchedule();                                                                          // Show schedule
 };
 
 class ScheduleForCar : public Schedule
@@ -101,15 +102,15 @@ public:
     void showScheduleForCar();                                                                                          // Show schedule for car
 };
 
-class ScheduleForCustomer : public Schedule
+class ScheduleForClient : public Schedule
 {
 private:
     Car *car; // Car
 
 public:
-    ScheduleForCustomer(int day_from, int month_from, int year_from, int day_to, int month_to, int year_to, Car *car); // Constructor
-    ScheduleForCustomer();                                                                                             // Constructor
-    void showScheduleForCustomer();                                                                                    // Show schedule for customer
+    ScheduleForClient(int day_from, int month_from, int year_from, int day_to, int month_to, int year_to, Car *car); // Constructor
+    ScheduleForClient();                                                                                             // Constructor
+    void showScheduleForCustomer();                                                                                  // Show schedule for customer
 };
 
 #endif // CLASSES_HPP
