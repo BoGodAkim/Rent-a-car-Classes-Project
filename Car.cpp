@@ -50,7 +50,8 @@ void Car::showCar()
          << "Year: " << this->year << endl
          << "Mileage: " << this->mileage << endl
          << "Price per day: " << this->price_per_day << endl
-         << "Deposit: " << this->deposit << endl;
+         << "Deposit: " << this->deposit << endl
+         << endl;
 }
 
 void Car::updateMileage()
@@ -64,6 +65,7 @@ void Car::updateMileage()
         mileage = stoi(value);
     } while (mileage < this->mileage);
     this->mileage = mileage;
+    cout << endl;
 }
 
 void Car::updatePrice()
@@ -77,6 +79,7 @@ void Car::updatePrice()
         price_per_day = stoi(value);
     } while (price_per_day <= 0);
     this->price_per_day = price_per_day;
+    cout << endl;
 }
 
 void Car::updateDeposit()
@@ -90,6 +93,7 @@ void Car::updateDeposit()
         deposit = stoi(value);
     } while (deposit <= 0);
     this->deposit = deposit;
+    cout << endl;
 }
 
 set<ScheduleForCar> *Car::getSchedule()

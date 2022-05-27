@@ -44,7 +44,8 @@ void ScheduleForCar::showScheduleForCar()
          << "Year from: " << this->year_from << endl
          << "Day to: " << this->day_to << endl
          << "Month to: " << this->month_to << endl
-         << "Year to: " << this->year_to << endl;
+         << "Year to: " << this->year_to << endl
+         << endl;
 }
 
 ScheduleForClient::ScheduleForClient()
@@ -69,5 +70,6 @@ void ScheduleForClient::showScheduleForClient()
          << "Year from: " << this->year_from << endl
          << "Day to: " << this->day_to << endl
          << "Month to: " << this->month_to << endl
-         << "Year to: " << this->year_to << endl;
+         << "Year to: " << this->year_to << endl
+         << endl;
 }

@@ -41,13 +41,15 @@ void Client::deleteSchedule()
             break;
         }
     }
+    cout << endl;
 }
 
 void Client::showSchedule()
 {
-    int i = 0;
+    int i = 1;
     for (auto it = this->schedule.begin(); it != this->schedule.end(); it++)
     {
+        cout << "Number: " << i << endl;
         printSchedule(*it);
         i++;
     }
@@ -61,7 +63,8 @@ void Client::showClient()
          << "Passport number: " << this->passport_number << endl
          << "Phone number: " << this->phone_number << endl
          << "Email: " << this->email << endl
-         << "Address: " << this->address << endl;
+         << "Address: " << this->address << endl
+         << endl;
 }
 
 set<ScheduleForClient> *Client::getSchedule()

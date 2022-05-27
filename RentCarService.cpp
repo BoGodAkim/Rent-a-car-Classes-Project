@@ -22,6 +22,7 @@ void RentCarService::enterMenu()
         cout << "Enter option: ";
         getline(cin, value);
         option = stoi(value);
+        cout << endl;
         switch (option)
         {
         case 1:
@@ -55,7 +56,6 @@ void RentCarService::enterMenu()
             cout << "Wrong option!" << endl;
             break;
         }
-        enterMenu();
     }
 }
 
@@ -103,6 +103,7 @@ void RentCarService::addCar()
         deposit = stoi(value);
     } while (deposit <= 0);
     cars.push_back(new Car(brand, model, color, VIN, year, mileage, price_per_day, deposit));
+    cout << endl;
 }
 
 void RentCarService::addClient()
@@ -129,6 +130,7 @@ void RentCarService::addClient()
     cout << "Enter address: ";
     getline(cin, address);
     clients[passport_number] = new Client(name, surname, date_of_birth, passport_number, phone_number, email, address);
+    cout << endl;
 }
 
 bool operator<(const Schedule &a, const Schedule &b)
@@ -405,6 +407,7 @@ void RentCarService::rentCar()
             car->addSchedule(&scheduleForCar);
         }
     } while (!flag);
+    cout << endl;
 }
 
 void RentCarService::deleteRentSchedule()
@@ -415,10 +418,14 @@ void RentCarService::deleteRentSchedule()
 
 void RentCarService::showCars()
 {
+    int i = 1;
     for (auto car = cars.begin(); car != cars.end(); car++)
     {
+        cout << "Number: " << i <<endl;
+        i++;
         (*car)->showCar();
     }
+    cout << endl;
 }
 
 void RentCarService::returnCar()
@@ -457,6 +464,7 @@ void RentCarService::updateCar()
             break;
         }
     }
+    cout << endl;
 }
 
 void RentCarService::deleteCar()
@@ -476,6 +484,7 @@ Car *RentCarService::chooseCar()
         getline(cin, value);
         choice = stoi(value);
     }
+    cout << endl;
     return cars[choice - 1];
 }
 
@@ -496,5 +505,6 @@ Client *RentCarService::chooseClient()
             cout << "Wrong passport number!" << endl;
         }
     }
+    cout << endl;
     return clients[choice];
 }
