@@ -20,28 +20,10 @@ void Client::addSchedule(ScheduleForClient *schedule)
     this->schedule.insert(*schedule);
 }
 
-void Client::deleteSchedule()
+void Client::deleteSchedule(Schedule *schedule)
 {
-    this->showSchedule();
-    string value;
-    int choice = 0;
-    while (choice < 1 || choice > this->schedule.size())
-    {
-        cout << "Enter schedule number: ";
-        getline(cin, value);
-        choice = stoi(value);
-    }
-    for (auto it = this->schedule.begin(); it != this->schedule.end(); it++)
-    {
-        choice--;
-        if (choice == 0)
-        {
-            it->car->deleteSchedule(&(*it));
-            this->schedule.erase(it);
-            break;
-        }
-    }
-    cout << endl;
+    ScheduleForClient schedule_for_car(schedule, nullptr);
+    this->schedule.erase(schedule_for_car);
 }
 
 void Client::showSchedule()

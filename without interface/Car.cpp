@@ -21,16 +21,10 @@ void Car::addSchedule(ScheduleForCar *schedule)
     this->schedule.insert(*schedule);
 }
 
-void Car::deleteSchedule(const Schedule *schedule)
+void Car::deleteSchedule(Schedule *schedule)
 {
-    for (auto it = this->schedule.begin(); it != this->schedule.end(); it++)
-    {
-        if (*it == *schedule)
-        {
-            this->schedule.erase(it);
-            break;
-        }
-    }
+    ScheduleForCar schedule_for_car(schedule, nullptr);
+    this->schedule.erase(schedule_for_car);
 }
 
 void Car::showSchedule()
