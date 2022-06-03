@@ -53,3 +53,8 @@ set<ScheduleForClient> *Client::getSchedule()
 {
     return &(this->schedule);
 }
+
+string Client::getPassportNumber()
+{
+    return this->passport_number;
+}

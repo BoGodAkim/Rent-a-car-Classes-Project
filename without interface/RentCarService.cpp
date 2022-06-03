@@ -32,7 +32,7 @@ void RentCarService::addCar(string brand, string model, string color, string VIN
 
 void RentCarService::addClient(string name, string surname, string date_of_birth, string passport_number, string phone_number, string email, string address)
 {
-    if(clients.find(passport_number) != clients.end())
+    if (clients.find(passport_number) != clients.end())
     {
         cout << "Client with this passport number already exists!" << endl;
         return;
@@ -42,10 +42,6 @@ void RentCarService::addClient(string name, string surname, string date_of_birth
 
 bool operator<(const Schedule &a, const Schedule &b)
 {
-    // if (a.year_to <= b.year_from && a.month_to <= b.month_from && a.day_to < b.day_from)
-    //     return true;
-    // else
-    //     return false;
     if (a.year_to * 366 + a.month_to * 31 + a.day_to < b.year_from * 366 + b.month_from * 31 + b.day_from)
         return true;
     else
@@ -54,10 +50,6 @@ bool operator<(const Schedule &a, const Schedule &b)
 
 bool operator>(const Schedule &a, const Schedule &b)
 {
-    // if (b.year_to <= a.year_from && b.month_to <= a.month_from && b.day_to < a.day_from)
-    //     return true;
-    // else
-    //     return false;
     if (b < a)
         return true;
     else
@@ -73,10 +65,16 @@ void RentCarService::rentCar(Client *client, Car *car, Schedule schedule)
 {
     ScheduleForCar scheduleForCar(&schedule, client);
     ScheduleForClient scheduleForClient(&schedule, car);
-    if(client->getSchedule()->find(scheduleForClient) != client->getSchedule()->end())
-        cout << "This client already has a car in this time";
-    if(car->getSchedule()->find(scheduleForCar) != car->getSchedule()->end())
-        cout << "This car already has a client in this time";
+    if (client->getSchedule()->find(scheduleForClient) != client->getSchedule()->end())
+    {
+        cout << "This client already has a car in this time!" << endl;
+        return;
+    }
+    if (car->getSchedule()->find(scheduleForCar) != car->getSchedule()->end())
+    {
+        cout << "This car already has a client in this time!" << endl;
+        return;
+    }
     client->addSchedule(&scheduleForClient);
     car->addSchedule(&scheduleForCar);
 }
@@ -95,12 +93,22 @@ void RentCarService::showCars()
 
 void RentCarService::deleteCar(Car *car)
 {
+    for (auto it = car->getSchedule()->begin(); it != car->getSchedule()->end(); ++it)
+    {
+        Schedule schedule = *it;
+        it->client->deleteSchedule(&schedule);
+    }
     cars.erase(remove(cars.begin(), cars.end(), car), cars.end());
 }
 
 void RentCarService::deleteClient(Client *client)
 {
-    clients.erase(remove(clients.begin(), clients.end(), client), clients.end());
+    for (auto it = client->getSchedule()->begin(); it != client->getSchedule()->end(); ++it)
+    {
+        Schedule schedule = *it;
+        it->car->deleteSchedule(&schedule);
+    }
+    clients.erase(client->getPassportNumber());
 }
 
 void RentCarService::deleteSchedule(Client *client, Car *car, Schedule schedule)
@@ -113,14 +121,14 @@ void RentCarService::deleteSchedule(Client *client, Car *car, Schedule schedule)
 
 Car *RentCarService::chooseCar(int index)
 {
-    if(index < 0 || index >= cars.size())
+    if (index < 0 || index >= cars.size())
         return nullptr;
     return cars[index];
 }
 
 Client *RentCarService::chooseClient(string passport_number)
 {
-    if(clients.find(passport_number) == clients.end())
+    if (clients.find(passport_number) == clients.end())
     {
         cout << "Client with this passport number doesn't exist!" << endl;
         return nullptr;

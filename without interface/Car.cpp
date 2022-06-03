@@ -45,7 +45,9 @@ void Car::showCar()
          << "Mileage: " << this->mileage << endl
          << "Price per day: " << this->price_per_day << endl
          << "Deposit: " << this->deposit << endl
-         << endl;
+         << "Schedule: " << endl;
+    this->showSchedule();
+    cout << endl;
 }
 
 void Car::updateMileage(int mileage)

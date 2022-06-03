@@ -31,7 +31,7 @@ public:
     Car *chooseCar(int index);                                                                                                                    // Choose car from the vector using function Car::showCar() and ask for the number of the car from the manager
     Client *chooseClient(string passport_number);                                                                                                 // Choose client: ask for the passport number of the client and return the pointer to the client
     RentCarService();  // Constructor
-    ~RentCarService(); // Destructor
+    ~RentCarService() = default; // Destructor
 };
 
 class Car
@@ -82,6 +82,7 @@ public:
     void showSchedule();                                                                                                                  // Show schedule
     void showClient();                                                                                                                    // Show client
     set<ScheduleForClient> *getSchedule();                                                                                                // Return pointer to the set schedule
+    string getPassportNumber();                                                                                                           // Return passport number
 };
 
 class Schedule
@@ -106,7 +107,6 @@ class ScheduleForCar : public Schedule
 public:
     Client *client; // Client
 
-public:
     ScheduleForCar(Schedule *schedule, Client *client); // Constructor
     ScheduleForCar();                                   // Constructor
     ~ScheduleForCar() = default;                        // Destructor
@@ -118,7 +118,6 @@ class ScheduleForClient : public Schedule
 public:
     Car *car; // Car
 
-public:
     ScheduleForClient(Schedule *schedule, Car *car); // Constructor
     ScheduleForClient();                             // Constructor
     ~ScheduleForClient() = default;                  // Destructor
