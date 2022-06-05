@@ -4,6 +4,15 @@ Car::Car()
 {
 }
 
+Car::~Car()
+{
+    for (auto it = this->schedule.begin(); it != this->schedule.end(); ++it)
+    {
+        Schedule schedule = *it;
+        it->deleteClientSchedule();
+    }
+}
+
 Car::Car(string brand, string model, string color, string VIN, int year, int mileage, int price_per_day, int deposit)
 {
     this->brand = brand;
@@ -21,7 +30,7 @@ void Car::addSchedule(ScheduleForCar *schedule)
     this->schedule.insert(*schedule);
 }
 
-void Car::deleteSchedule(Schedule *schedule)
+void Car::deleteSchedule(const Schedule *schedule)
 {
     ScheduleForCar schedule_for_car(schedule, nullptr);
     this->schedule.erase(schedule_for_car);
@@ -31,7 +40,7 @@ void Car::showSchedule()
 {
     for (auto it = this->schedule.begin(); it != this->schedule.end(); it++)
     {
-        printSchedule(*it);
+        it->printSchedule();
     }
 }
 
@@ -64,7 +73,7 @@ void Car::updateMileage(int mileage)
 
 void Car::updatePrice(int price_per_day)
 {
-    if(price_per_day < 1)
+    if (price_per_day < 1)
     {
         cout << "Price per day must be larger then 0" << endl;
     }
@@ -74,10 +83,9 @@ void Car::updatePrice(int price_per_day)
     }
 }
 
-
 void Car::updateDeposit(int deposit)
 {
-    if(deposit < 1)
+    if (deposit < 1)
     {
         cout << "Deposit must be larger then 0" << endl;
     }
@@ -87,7 +95,7 @@ void Car::updateDeposit(int deposit)
     }
 }
 
-set<ScheduleForCar> *Car::getSchedule()
+bool Car::checkSchedule(ScheduleForCar schedule)
 {
-    return &(this->schedule);
+    return this->schedule.find(schedule) != this->schedule.end();
 }

@@ -4,6 +4,11 @@ Schedule::Schedule()
 {
 }
 
+void Schedule::printSchedule() const
+{
+    cout << this->year_from << "." << this->month_from << "." << this->day_from << "-" << this->year_to << "." << this->month_to << "." << this->day_to << endl;
+}
+
 bool checkSchedule(int year_from, int month_from, int day_from, int year_to, int month_to, int day_to)
 {
     if (year_from < 2022)
@@ -152,7 +157,7 @@ void Schedule::fillSchedule(int day_from, int month_from, int year_from, int day
     this->year_to = year_to;
 }
 
-bool Schedule::operator<(const Schedule &schedule)
+bool Schedule::operator<(const Schedule &schedule) const
 {
     if (this->year_to <= schedule.year_from && this->month_to <= schedule.month_from && this->day_to < schedule.day_from)
         return true;
@@ -164,7 +169,7 @@ ScheduleForCar::ScheduleForCar()
 {
 }
 
-ScheduleForCar::ScheduleForCar(Schedule *schedule, Client *client)
+ScheduleForCar::ScheduleForCar(const Schedule *schedule, Client *client)
 {
     this->day_from = schedule->day_from;
     this->month_from = schedule->month_from;
@@ -186,11 +191,16 @@ void ScheduleForCar::showScheduleForCar()
          << endl;
 }
 
+void ScheduleForCar::deleteClientSchedule() const
+{
+    this->client->deleteSchedule(this);
+}
+
 ScheduleForClient::ScheduleForClient()
 {
 }
 
-ScheduleForClient::ScheduleForClient(Schedule *schedule, Car *car)
+ScheduleForClient::ScheduleForClient(const Schedule *schedule, Car *car)
 {
     this->day_from = schedule->day_from;
     this->month_from = schedule->month_from;
@@ -210,4 +220,9 @@ void ScheduleForClient::showScheduleForClient()
          << "Month to: " << this->month_to << endl
          << "Year to: " << this->year_to << endl
          << endl;
+}
+
+void ScheduleForClient::deleteCarSchedule() const
+{
+    this->car->deleteSchedule(this);
 }

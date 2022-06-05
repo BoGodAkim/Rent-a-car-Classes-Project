@@ -5,6 +5,18 @@ RentCarService::RentCarService()
 {
 }
 
+RentCarService::~RentCarService()
+{
+    for(auto it = cars.begin(); it != cars.end(); it++)
+    {
+        delete *it;
+    }
+    for(auto it = clients.begin(); it != clients.end(); it++)
+    {
+        delete it->second;
+    }
+}
+
 void RentCarService::addCar(string brand, string model, string color, string VIN, int year, int mileage, float price_per_day, int deposit)
 {
     if (year < 1900 || year > 2022)
@@ -40,41 +52,33 @@ void RentCarService::addClient(string name, string surname, string date_of_birth
     clients[passport_number] = new Client(name, surname, date_of_birth, passport_number, phone_number, email, address);
 }
 
-bool operator<(const Schedule &a, const Schedule &b)
+void RentCarService::rentCar(int index, string passport_number, Schedule schedule)
 {
-    if (a.year_to * 366 + a.month_to * 31 + a.day_to < b.year_from * 366 + b.month_from * 31 + b.day_from)
-        return true;
-    else
-        return false;
-}
-
-bool operator>(const Schedule &a, const Schedule &b)
-{
-    if (b < a)
-        return true;
-    else
-        return false;
-}
-
-void printSchedule(const Schedule &a)
-{
-    cout << a.year_from << "." << a.month_from << "." << a.day_from << "-" << a.year_to << "." << a.month_to << "." << a.day_to << endl;
-}
-
-void RentCarService::rentCar(Client *client, Car *car, Schedule schedule)
-{
+    Client *client = chooseClient(passport_number);
+    if (client == nullptr)
+    {
+        cout << "Client with this passport number doesn't exist!" << endl;
+        return;
+    }
+    Car *car = chooseCar(index);
+    if (car == nullptr)
+    {
+        cout << "Car with this index doesn't exist!" << endl;
+        return;
+    }
     ScheduleForCar scheduleForCar(&schedule, client);
     ScheduleForClient scheduleForClient(&schedule, car);
-    if (client->getSchedule()->find(scheduleForClient) != client->getSchedule()->end())
+    if (client->checkSchedule(scheduleForClient))
     {
         cout << "This client already has a car in this time!" << endl;
         return;
     }
-    if (car->getSchedule()->find(scheduleForCar) != car->getSchedule()->end())
+    if (car->checkSchedule(scheduleForCar))
     {
         cout << "This car already has a client in this time!" << endl;
         return;
     }
+
     client->addSchedule(&scheduleForClient);
     car->addSchedule(&scheduleForCar);
 }
@@ -91,32 +95,103 @@ void RentCarService::showCars()
     cout << endl;
 }
 
-void RentCarService::deleteCar(Car *car)
+void RentCarService::deleteCar(int index)
 {
-    for (auto it = car->getSchedule()->begin(); it != car->getSchedule()->end(); ++it)
+    Car *car = chooseCar(index);
+    if (car == nullptr)
     {
-        Schedule schedule = *it;
-        it->client->deleteSchedule(&schedule);
+        cout << "Car with this index doesn't exist!" << endl;
+        return;
     }
     cars.erase(remove(cars.begin(), cars.end(), car), cars.end());
+    delete car;
 }
 
-void RentCarService::deleteClient(Client *client)
+void RentCarService::deleteClient(string passport_number)
 {
-    for (auto it = client->getSchedule()->begin(); it != client->getSchedule()->end(); ++it)
+    Client *client = chooseClient(passport_number);
+    if (client == nullptr)
     {
-        Schedule schedule = *it;
-        it->car->deleteSchedule(&schedule);
+        cout << "Client with this passport number doesn't exist!" << endl;
+        return;
     }
     clients.erase(client->getPassportNumber());
+    delete client;
 }
 
-void RentCarService::deleteSchedule(Client *client, Car *car, Schedule schedule)
+void RentCarService::deleteSchedule(int index, string passport_number, Schedule schedule)
 {
+    Client *client=chooseClient(passport_number);
+    if (client == nullptr)
+    {
+        cout << "Client with this passport number doesn't exist!" << endl;
+        return;
+    }
+    Car *car = chooseCar(index);
+    if (car == nullptr)
+    {
+        cout << "Car with this index doesn't exist!" << endl;
+        return;
+    }
     ScheduleForCar scheduleForCar(&schedule, client);
     ScheduleForClient scheduleForClient(&schedule, car);
-    client->getSchedule()->erase(scheduleForClient);
-    car->getSchedule()->erase(scheduleForCar);
+    client->deleteSchedule(&scheduleForClient);
+    car->deleteSchedule(&scheduleForCar);
+}
+
+void RentCarService::showClient(string passport_number)
+{
+    Client *client = chooseClient(passport_number);
+    if (client == nullptr)
+    {
+        cout << "Client with this passport number doesn't exist!" << endl;
+        return;
+    }
+    client->showClient();
+}
+
+void RentCarService::showCar(int index)
+{
+    Car *car = chooseCar(index);
+    if (car == nullptr)
+    {
+        cout << "Car with this index doesn't exist!" << endl;
+        return;
+    }
+    car->showCar();
+}
+
+void RentCarService::carUpdateDeposit(int index, int deposit)
+{
+    Car *car = chooseCar(index);
+    if (car == nullptr)
+    {
+        cout << "Car with this index doesn't exist!" << endl;
+        return;
+    }
+    car->updateDeposit(deposit);
+}
+
+void RentCarService::carUpdatePrice(int index, float price)
+{
+    Car *car = chooseCar(index);
+    if (car == nullptr)
+    {
+        cout << "Car with this index doesn't exist!" << endl;
+        return;
+    }
+    car->updatePrice(price);
+}
+
+void RentCarService::carUpdateMilage(int index, int mileage)
+{
+    Car *car = chooseCar(index);
+    if (car == nullptr)
+    {
+        cout << "Car with this index doesn't exist!" << endl;
+        return;
+    }
+    car->updateMileage(mileage);
 }
 
 Car *RentCarService::chooseCar(int index)

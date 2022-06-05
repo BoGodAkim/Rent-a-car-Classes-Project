@@ -4,6 +4,15 @@ Client::Client()
 {
 }
 
+Client::~Client()
+{
+    for (auto it = this->schedule.begin(); it != this->schedule.end(); ++it)
+    {
+        Schedule schedule = *it;
+        it->deleteCarSchedule();
+    }
+}
+
 Client::Client(string name, string surname, string date_of_birth, string passport_number, string phone_number, string email, string address)
 {
     this->name = name;
@@ -20,7 +29,7 @@ void Client::addSchedule(ScheduleForClient *schedule)
     this->schedule.insert(*schedule);
 }
 
-void Client::deleteSchedule(Schedule *schedule)
+void Client::deleteSchedule(const Schedule *schedule)
 {
     ScheduleForClient schedule_for_car(schedule, nullptr);
     this->schedule.erase(schedule_for_car);
@@ -32,7 +41,7 @@ void Client::showSchedule()
     for (auto it = this->schedule.begin(); it != this->schedule.end(); it++)
     {
         cout << "Number: " << i << endl;
-        printSchedule(*it);
+        it->printSchedule();
         i++;
     }
 }
@@ -45,13 +54,14 @@ void Client::showClient()
          << "Passport number: " << this->passport_number << endl
          << "Phone number: " << this->phone_number << endl
          << "Email: " << this->email << endl
-         << "Address: " << this->address << endl
-         << endl;
+         << "Address: " << this->address << endl;
+    this->showSchedule();
+    cout << endl;
 }
 
-set<ScheduleForClient> *Client::getSchedule()
+bool Client::checkSchedule(ScheduleForClient schedule)
 {
-    return &(this->schedule);
+    return this->schedule.find(schedule) != this->schedule.end();
 }
 
 string Client::getPassportNumber()
