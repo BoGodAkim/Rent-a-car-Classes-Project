@@ -24,20 +24,20 @@ private:
     Client *chooseClient(string passport_number); // Choose client: ask for the passport number of the client and return the pointer to the client
 
 public:
-    void addCar(string brand, string model, string color, string VIN, int year, int mileage, float price_per_day, int deposit);                   // Add a car to the vector with parameters from the manager
-    void addClient(string name, string surname, string date_of_birth, string passport_number, string phone_number, string email, string address); // Add client to the map with parameters from the manager
-    void rentCar(int index, string passport_number, Schedule schedule);                                                                           // This function call Car* chooseCar() and Client* chooseClient(), ask date period from manager and if can rent the car to the client using function Car::addSchedule() and Client::addSchedule()
+    void addCar(string brand, string model, string color, string VIN, int year, int mileage, float price_per_day, int deposit);                   // Add a car to the vector with parameters 
+    void addClient(string name, string surname, string date_of_birth, string passport_number, string phone_number, string email, string address); // Add client to the map with parameters 
+    void rentCar(int index, string passport_number, Schedule schedule);                                                                           // This function call Car* chooseCar() and Client* chooseClient() and rent the car to the client with the given schedule
     void showCars();                                                                                                                              // Show cars all cars in the vector using function Car::showCar()
     void showClient(string passport_number);                                                                                                      // Show client with this passport number using function Client::showClient()
     void showCar(int index);                                                                                                                      // Show car with this index using function Car::showCar()
     void deleteCar(int index);                                                                                                                    // Delete car call Car* chooseCar()
-    void deleteClient(string passport_number);
-    void deleteSchedule(int index, string passport_number, Schedule schedule); // Delete client call Client* chooseClient()
-    void carUpdateMilage(int index, int mileage);                              // Update car mileage call Car* chooseCar()
-    void carUpdatePrice(int index, float price_per_day);                       // Update car price call Car* chooseCar()
-    void carUpdateDeposit(int index, int deposit);                             // Update car deposit call Car* chooseCar()
-    RentCarService();                                                          // Constructor
-    ~RentCarService();                                                         // Destructor
+    void deleteClient(string passport_number);                                                                                                    // Delete client call Client* chooseClient()
+    void deleteSchedule(int index, string passport_number, Schedule schedule);                                                                    // Call Car* chooseCar() and Client* chooseClient() and delete the schedule with the given parameters
+    void carUpdateMilage(int index, int mileage);                                                                                                 // Update car mileage call Car* chooseCar()
+    void carUpdatePrice(int index, float price_per_day);                                                                                          // Update car price call Car* chooseCar()
+    void carUpdateDeposit(int index, int deposit);                                                                                                // Update car deposit call Car* chooseCar()
+    RentCarService();                                                                                                                             // Constructor
+    ~RentCarService();                                                                                                                            // Destructor
 };
 
 class Car
@@ -57,13 +57,13 @@ public:
     Car(string brand, string model, string color, string VIN, int year, int mileage, int price_per_day, int deposit); // Constructor
     Car();                                                                                                            // Constructor
     ~Car();                                                                                                           // Destructor
-    void addSchedule(ScheduleForCar *schedule);                                                                       // Add schedule to the set schedule if the car is available for this schedule and return true if the car is available for this schedule
-    void deleteSchedule(const Schedule *schedule);                                                                          // Delete schedule
+    void addSchedule(ScheduleForCar *schedule);                                                                       // Add schedule to the set schedule 
+    void deleteSchedule(const Schedule *schedule);                                                                    // Delete schedule
     void showSchedule();                                                                                              // Show schedule
     void showCar();                                                                                                   // Show car
-    void updateMileage(int mileage);                                                                                  // Update mileage ask manager to enter the new mileage which larger then before and update the mileage
-    void updatePrice(int price_per_day);                                                                              // Update price ask manager to enter the new price and update the price
-    void updateDeposit(int deposit);                                                                                  // Update deposit ask manager to enter the new deposit and update the deposit
+    void updateMileage(int mileage);                                                                                  // Check if the mileage is greater than the current mileage and update the mileage
+    void updatePrice(int price_per_day);                                                                              // Update price per day
+    void updateDeposit(int deposit);                                                                                  // Update deposit
     bool checkSchedule(ScheduleForCar schedule);                                                                      // Check if the car is available for this schedule
 };
 
@@ -83,8 +83,8 @@ public:
     Client(string name, string surname, string date_of_birth, string passport_number, string phone_number, string email, string address); // Constructor
     Client();                                                                                                                             // Constructor
     ~Client();                                                                                                                            // Destructor
-    void addSchedule(ScheduleForClient *schedule);                                                                                        // Add schedule to the set schedule if the car is available for this schedule and return true if the car is available for this schedule
-    void deleteSchedule(const Schedule *schedule);                                                                                              // Delete schedule: call showSchedule() and ask for the number of the schedule from the manager, call Car::deleteSchedule(ScheduleForClient schedule) and delete the schedule from the set schedule
+    void addSchedule(ScheduleForClient *schedule);                                                                                        // Add schedule to the set schedule
+    void deleteSchedule(const Schedule *schedule);                                                                                        // Delete schedule
     void showSchedule();                                                                                                                  // Show schedule
     void showClient();                                                                                                                    // Show client
     bool checkSchedule(ScheduleForClient schedule);                                                                                       // Check if the car is available for this schedule and return true if the car is available for this schedule
@@ -118,9 +118,9 @@ private:
 
 public:
     ScheduleForCar(const Schedule *schedule, Client *client); // Constructor
-    ScheduleForCar();                                   // Constructor
-    ~ScheduleForCar() = default;                        // Destructor
-    void showScheduleForCar();                          // Show schedule for car
+    ScheduleForCar();                                         // Constructor
+    ~ScheduleForCar() = default;                              // Destructor
+    void showScheduleForCar();                                // Show schedule for car
     void deleteClientSchedule() const;                        // Delete client schedule
 };
 
@@ -131,9 +131,9 @@ private:
 
 public:
     ScheduleForClient(const Schedule *schedule, Car *car); // Constructor
-    ScheduleForClient();                             // Constructor
-    ~ScheduleForClient() = default;                  // Destructor
-    void showScheduleForClient();                    // Show schedule for customer
+    ScheduleForClient();                                   // Constructor
+    ~ScheduleForClient() = default;                        // Destructor
+    void showScheduleForClient();                          // Show schedule for customer
     void deleteCarSchedule() const;                        // Delete car schedule
 };
 
